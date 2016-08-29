@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+      <title>HOW TO GUIDE: AUTOSAVE</title>
+      <link rel="stylesheet" type="text/css"
+      href="../utils/support.css" />
+      <!-- Script that generates the Table of Contents -->
+      <script type="text/javascript"
+      src="http://epics-pvdata.sourceforge.net/script/tocgen.js">
+      </script>
+    </head>
+    <body>
+      <div class="head">
+        <h1>HOW TO GUIDE: AUTOSAVE</h1>
+          <dl>
+            <dt>Latest version:</dt>
+              <dd>
+                <a href="autosave.html">autosave.html</a>
+              </dd>
+            <dt>Description:</dt>
+              <dd>This note summarizes the steps needed to add autosave support to an IOC.</dd>
+            <dt>Autosave version:</dt>
+              <dd>5-7-1 (>5-5)</dd>
+            <dt>EPICS Base version:</dt>
+              <dd>3.14.12.5</dd>
+            <dt>Editors:</dt>
+              <dd>Alireza Panna, NIH<dd />
+          </dl>
+      </div>
+
+      <div id="toc">
+        <h2 class="nocount" style="page-break-before: always">Table of Contents</h2>
+      </div>
+      <div id="contents" class="contents">
+        <h2>WHERE TO FIND IT</h2>
+          <p>The module is being developed at:</p>
+            <a href="https://github.com/epics-modules/autosave">
+              autosave-github
+            </a>
+        <h2>INTRODUCTION</h2>
+          <p>Autosave is a two-part operation: run-time save 
+            (the save_restore task or thread), and boot-time restore (dbrestore.c).
+            In addition to this autosave also contains 3 additional functionalities:
+          </p>
+          <ol type="1">
+            <li> <b>asVerify:</b> <br />
+                This facility compares written autosave files with current PV  values. 
+                This program can also write an autosave file from which PV values can be restored. 
+                To use this facility through the ioc console autosave version >=5.6.1 is required.
+              <pre>
+<!--         -->  usage:     asVerify [-vrd] <autosave_file>
+<!--         -->  -v (verbose) causes all PV's to be printed out. Otherwise, only PV's whose values differ are printed.
+<!--         -->  -r (restore_file) causes a restore file named '<autosave_file>.asVerify' to be written.
+<!--         -->  -d (debug) increment debug level by one.
+<!--         -->  -rv (or -vr) does both
+<!--       --></pre>
+            </li>
+            <li> <b>configMenu:</b><br />
+              This facility can perform manual save/restore of IOC configurations and supports custom file naming for sav (.cfg) files.<br />
+              <b>New in autosave R5-7:</b> The number of configurations that a 
+                 configMenu instance can handle used to be 10, but now it is unlimited. If more than ten configurations are found, one can page through the list, ten configurations at a time.
+            </li>
+            <li> <b>autoSaveBuild:</b><br />
+                 Generates autosave-request files as part of the operation of the EPICX functions dbLoadRecords() and dbLoadTemplate(). To use this facility base version > 3.15.0.2 is required.
+            </li>
+          </ol>
+        <h2>ADDING AUTOSAVE SUPPORT TO YOUR APPLICATION</h2>
+          <ol type="1">
+            <li> Add the following lines to <code>$(TOP)/configure/RELEASE</code> file of your app
+              <pre>
+<!--         -->  DEVIOCSTATS=$(SYN_SUPPORT)/autosave-5-7-1
+<!--         -->  AUTOSAVE=$(SYN_SUPPORT)/ autosave-5-7-1
+<!--       --></pre>
+            </li>
+            <li> Add the following two lines to the <code>xxxApp/src/Makefile</code>
+              <pre>
+<!--         -->  ifdef AUTOSAVE
+<!--         -->    xxx_DBD += asSupport.dbd
+<!--         -->    xxx_LIBS += autosave
+<!--         -->  endif
+<!--       --></pre>
+              The first line adds device support to the xxx.dbd file, the second includes autosave objects into the IOC binary.
+            </li>
+            <li> Add this line to <code>xxxApp/Db/Makefile</code>
+              <pre>
+<!--         -->  ifdef AUTOSAVE
+<!--         -->    DB_INSTALLS += $(AUTOSAVE)/asApp/Db/save_restoreStatus.db
+<!--         -->    DB_INSTALLS += $(AUTOSAVE)/asApp/Db/configMenu.db
+<!--         -->  endif
+<!--       --></pre>
+              This is for convenience. It will copy the save_restoreStatus.db and the configMenu.db file to the <code>$(TOP)/db</code> of the IOC when the app is built.<br />
+              At this point you should be able to build the app without any errors. To use devIocStats for your app you have to add the following lines to the st.cmd (IOC startup file of your app)
+            </li>
+            <li> Add the following lines to <code>$(TOP)/iocBoot/$(IOC)/st.cmd</code>
+              <pre>
+<!--         -->  ######################################################################
+<!--         -->  # Begin save_restore.cmd
+     
+<!--         -->  # Debug-output level
+<!--         -->  save_restoreSet_Debug(0)
+     
+<!--         -->  # status PVs
+<!--         -->  save_restoreSet_status_prefix("P=$(P):")
+<!--         -->  dbLoadRecords("$(AUTOSAVE)/asApp/Db/save_restoreStatus.db","P=$(P):")
+<!--         -->  # BUSY support is required to load this record
+<!--         -->  dbLoadRecords("$(AUTOSAVE)/asApp/Db/configMenu.db","P=$(P):,CONFIG=$(CONFIG)")
+     
+<!--         -->  # Ok to save/restore save sets with missing values (no CA connection to PV)?
+<!--         -->  save_restoreSet_IncompleteSetsOk(1)
+     
+<!--         -->  # Save dated backup files. Boot backup file is written
+<!--         -->  # during pass 0. At boot time the restore software will
+<!--         -->  # write a dated back up copy from which it restored the PVs
+<!--         -->  save_restoreSet_DatedBackupFiles(1)
+     
+<!--         -->  # Number of sequenced backup files to write (.sav0, .sav1, .sav2 files)
+<!--         -->  # maintain three copies of each .sav file, at ten-minute intervals
+<!--         -->  save_restoreSet_NumSeqFiles(1)
+     
+<!--         -->  # Time interval between sequenced backups
+<!--         -->  save_restoreSet_SeqPeriodInSeconds(600)
+     
+<!--         -->  # Ok to retry connecting to PVs whose initial connection attempt failed?
+<!--         -->  save_restoreSet_CAReconnect(1)
+     
+<!--         -->  # Time interval in seconds between forced save-file writes (-1 means forever).
+<!--         -->  save_restoreSet_CallbackTimeout(-1)
+     
+<!--         -->  # Specify the directory in which you want .sav files to be written, 
+<!--         -->  # This path is prepended to the .sav file when the 
+<!--         -->  # set_passX_restoreFIle(xxx.sav) command is invoked.
+<!--         -->  set_savefile_path("$(TOP)/iocBoot/$(IOC)", "autosave")
+     
+<!--         -->  # End save_restore.cmd
+<!--         -->  ######################################################################
+<!--         -->  # specify what save files should be restored.  Note these files must be
+<!--         -->  # in the directory specified in set_savefile_path(), BOOT TIME RESTORE:
+<!--         -->  # pass_0 => before record initialization, pass_1 => after record initialization
+<!--         -->  set_pass0_restoreFile("auto_positions.sav")
+<!--         -->  set_pass1_restoreFile("auto_settings.sav")
+     
+<!--         -->  # specify directories in which to to search for included request files.
+<!--         -->  # request files are normally located in the directory where st.cmd is located. 
+<!--         -->  # This path is prepended to the request file when the 
+<!--         -->  # create_monitor_set("xxx.req", 5, "P=$(P):") command is invoked.
+     
+<!--         -->  set_requestfile_path("$(TOP)/iocBoot/$(IOC)", "")
+<!--         -->  set_requestfile_path("$(TOP)/iocBoot/$(IOC)", "autosave")
+<!--         -->  set_requestfile_path("$(TOP)", "xxxApp/Db")
+<!--         -->  set_requestfile_path("$(AUTOSAVE)", "asApp/Db")
+<!--         -->  ...
+<!--         -->  iocInit
+<!--         -->  ######################################################################
+<!--         -->  # start the save-restore task
+<!--         -->  create_monitor_set("auto_positions.req", 5, "P=$(P):")
+<!--         -->  create_monitor_set("auto_settings.req", 30, "P=$(P):")
+     
+<!--         -->  # Handle autosave 'commands' contained in loaded databases
+<!--         -->  # Searches through the EPICS database for info nodes named 'autosaveFields'
+<!--         -->  # and 'autosaveFields_pass0' and write the PV names to the files
+<!--         -->  # 'info_settings.req' and 'info_positions.req'
+<!--         -->  makeAutosaveFiles()
+<!--         -->  create_monitor_set("info_positions.req", 5, "P=$(P):")
+<!--         -->  create_monitor_set("info_settings.req", 30, "P=$(P):")
+     
+<!--         -->  # For configMenu
+<!--         -->  # Note that the request file must be named $(CONFIG)Menu.req. If the macro
+<!--         -->  # CONFIGMENU is defined with any value, backup (.savB) and sequence (.savN) files
+<!--         -->  # will not be written.
+<!--         -->  create_manual_set("xxxMenu.req","P=$(P):,CONFIG=$(CONFIG),CONFIGMENU=1")
+<!--         -->  ######################################################################
+<!--       --></pre>
+              <p> 
+                For each create_monitor_set(<name>.req, <time>, <macro>) command, the save_restore process will write the files <name>.sav and <name>.savB every <time> seconds, if any of the PVs named in the file <name>.req have changed value since the last write. Other create_xxx_set()commands do the same thing, but with different conditions triggering the save operation.
+              </p>
+            </li>
+          </ol>    
+        <h2>SUMMARY FOR END USERS</h2>
+          <p>
+            If autosave is added to an App it will perform run-time save of all records 
+            for a given ioc which are specified in the request (.req) file. 
+            Generally the main request file is stored in <code>$(TOP)/xxxApp/Db</code>. 
+            The auto_settings.req/auto_positions.req files stored in <code>$(TOP)/iocBoot/iocxxx</code>
+            will point to this request file. The save (.sav) files are stored in the <code>$(TOP)/iocBoot/iocxxx/autosave</code>
+            directory in the following fashion
+            <ol type="1">
+              <li> 
+                .sav and .savB files refers to the files that are being saved and updated. 
+                The update time is usually set to 5 secs for auto_positions.req and 30 secs for auto_settings.req. 
+                This update time can be changed in the st.cmd file.
+              </li>
+              <li> 
+                Sequenced backup files which are copies of the .sav files are written and updated every 10 mins
+                (this interval can also be changed in the save_restore.cmd by changing the save_restoreSet_SeqPeriodInSeconds() ) file.
+                These files have the format: _settings.sav0, _settings.sav1, ...etc. 
+                We save only 1 sequenced back-up so the autosave folder will also contain file with .sav0 extension.
+              </li>
+              <li> 
+                If the ioc is rebooted with auto save enabled, boot-time restore will occur. 
+                The IOC configuration will be restored from auto_positions.sav  in pass 0 i.e. 
+                before records are initialized and auto_settings.sav in pass 1 i.e. after the records are initialized. 
+                In addition the .sav files from which the restore occurred will be saved in the autosave directory
+                with date and time appended to the them. 
+                This lets the end user know the date and time of last reboot as well as the file from which the configuration was restored.
+              </li>
+            <li> 
+              In conclusion with the current settings the autosave folder will contain the following files at the minimum:<br />
+              auto_settings.sav<br />                               
+              auto_settings.savB<br />
+              auto_settings.sav0<br /><br />
+     
+              auto_positions.sav<br />
+              auto_positions.savB<br />
+              auto_positions.sav0<br /><br />
+     
+              info_settings.savz<br />
+              info_settings.savB<br />
+              info_settings.sav0<br /><br />
+     
+              info_positions.sav<br />
+              info_positions.savB<br />
+              info_positions.sav0<br /><br />
+     
+              For each restore a dated backup file will be created from the .sav files.
+            <li> 
+              Regarding info_settings.sav/info_positions.sav
+              These files save special readback (input) records in most cases which contain
+              the info node. An info node, in an EPICS database, is similar to a field
+              specification, but it has the word info instead of field; and it has an arbitrary
+              name, instead of the name of a field in the record. For example:
+              <pre>
+<!--         -->  record(ao, "$(P)test1") {
+<!--         -->    field(DTYP, "Soft Channel")
+<!--         -->    info(autosaveFields, "PREC EGU DESC")
+<!--         -->    info(autosaveFields_pass0, "VAL")
+<!--         -->  }
+<!--       --></pre>
+              From this information, makeAutosaveFiles() will write the following two files: </br>
+              info_settings.req<br />
+              $(P)test1.PREC<br />
+              $(P)test1.EGU<br />
+              $(P)test1.DESC<br /><br />
+    
+              info_positions.req<br />
+              $(P)test1.VAL<br />
+          </p>
+        <h2>ABOUT SAV FILES:</h2>
+          <p>
+            PV values in a save file have been converted to strings, 
+            in most cases simply by having been read as strings.
+            Save files are not intended to be edited manually. 
+            If you, nevertheless, do edit a save file, you must end it with the text <END> 
+            followed by one or two arbitrary characters (normally '\n' or '\r\n'). 
+            If the file does not end with this text, <code>reboot_restore()</code> will assume the crate 
+            crashed while the file was being written, or that some other bad thing happened, 
+            and will not use the file. Once a save file has been created successfully, 
+            save_restore will not overwrite the file unless a good ".savB" backup file exists.
+            Similarly, it will not overwrite the ".savB" file unless the save file was successfully written.
+            You can comment out lines in a .sav file by beginning them with '#'.
+          </p>
+    </div>
+  </body>
+</html>

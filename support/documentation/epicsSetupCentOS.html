@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+      <title>HOW TO GUIDE: EPICS SETUP-CENTOS</title>
+      <link rel="stylesheet" type="text/css" href="../utils/support.css" />
+      <!-- Script that generates the Table of Contents -->
+      <script type="text/javascript"
+      src="http://epics-pvdata.sourceforge.net/script/tocgen.js">
+      </script>
+    </head>
+
+    <body>
+      <div class="head">
+        <h1>HOW TO GUIDE: EPICS SETUP-CENTOS</h1>
+        <dl>
+          <dt>Latest version:</dt>
+          <dd>
+            <a href="epicsSetupCentOS.html">epicsSetupCentOS.html</a>
+          </dd>
+          <dt>Description:</dt>
+          <dd>
+            This note summarizes the steps needed for a fresh install of
+            CentOS with preempt rt patch, and all additional software
+            needed to set up the Instrument Controller.
+          </dd>
+          <dt>OS Version:</dt>
+          <dd> CentOS 7 linux-x86_64</dd>
+          <dt>Date:</dt>
+          <dd>Mar 9 2016</dd>
+          <dt>Editors:</dt>
+          <dd>Alireza Panna, NIH</dd>
+        </dl>
+      </div>
+    
+      <div id="toc">
+        <h2 class="nocount" style="page-break-before: always">Table of Contents</h2>
+      </div>
+
+      <div id="contents" class="contents">
+        <h2>WHERE TO FIND IT</h2>
+          <a href="https://www.centos.org/">
+           CentOS
+          </a>
+          <p>
+            I am using centOS 7 minimal iso based on the stable linux kernel 3.10.0-327.e17.x86_64
+            To install I simply burn the iso to a dvd. (We had a 700MB empty drive in the lab so I just use that)
+          </p>
+          <a href="https://sourceforge.net/projects/linux-gpib/">
+           Linux GPIB
+          </a>
+          <p> I am using the latest version 4.0.2. This is required if you are using a gpib controller.</p>
+          <a href="https://sourceforge.net/projects/re2c/">
+           re2c
+          </a>
+          <p> I am using version 0.13.5. This is required if you want to compile sequencer.</p>
+          <a href="http://www.aps.anl.gov/epics/base/R3-14/12.php">
+           EPICS base
+          </a>
+          <p> I am using version 3.14.12.5</p>
+          <a href="https://sourceforge.net/projects/procserv/">
+           ProcServ
+          </a>
+          <p> I am using latest version 2.6.0. This is required if you want to run ioc servers as daemon processes.</p>          
+        <h2>INSTALL A DESKTOP MANAGER</h2>
+          <pre>
+<!--         -->  sudo yum -y groups install "Server with GUI"
+<!--         -->  sudo systemctl set-default graphical.target
+<!--   --></pre>
+          <p>
+            This will install a server based GNOME desktop manager and set the login manager at start-up
+          </p>
+        <h2>ADDING THE PREEMPT-RT PATCH TO THE KERNEL:</h2>
+          # denote comments
+          <p>First get all necessary tools installed on your system</p>
+          <pre>
+<!--         -->  sudo yum groupinstall "Development Tools" -y
+<!--         -->  sudo yum -y install hmaccalc zlib-devel binutils-devel elfutils-libelf-devel
+<!--   --></pre>
+          <p>Now let's check what kernel we are running:</p>
+          <pre>
+<!--         -->  uname -r
+<!--   --></pre>
+          <p>The config file which was used to compile that kernel should be located in 
+             <code>/boot/config-3.10.0-327.e17.x86_64</code>. We want to get the kernel
+             and patch which is very similar to this kernel. I used the linux-3.10.75 kernel 
+             as the 3.10 mainline is very stable.
+          </p>
+          <p>Change to kernels directory: <code>cd /usr/src/kernels</code></p>
+          <p>Download the kernel and the patch. You will have to perform the following as superuser (su) since we are in the kernel directory</p>
+          <pre>
+<!--         -->  su          
+<!--         -->  # patch
+<!--         -->  wget https://www.kernel.org/pub/linux/kernel/projects/rt/3.10/older/patch-3.10.75-rt80.patch.gz
+<!--         -->  # kernel
+<!--         -->  wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.10.75.tar.gz && tar -xzvf linux-3.10.75.tar.gz
+<!--         -->  # x - extract
+<!--         -->  # z - pipe through gunzip
+<!--         -->  # v - verbose (text output)
+<!--         -->  # f - from file
+<!--         -->  # rename the kernel directory
+<!--         -->  mv linux-3.10.75 linux-3.10.75-rt80
+<!--         -->  # Patch the kernel:
+<!--         -->  cd linux-3.10.75-rt80
+<!--         -->  zcat ../patch-3.10.75-rt80.patch.gz | patch -p1
+<!--   --></pre>
+          <p>Copy the existing .config file from your distribution to the patched kernel source</p>
+          <pre>
+<!--         -->  cp /boot/config-3.10.0-327.el7.x86_64 .config
+<!--   --></pre>
+          <p>The next step should create a menu in the terminal.</p>
+          <pre>
+<!--         -->  make oldconfig
+<!--   --></pre>
+          <p>
+            The following needs to be changed for full pre-emption, for the other settings just press [Enter] unless you know what you are doing.
+          </p>
+          <pre>
+<!--         -->  Preemption Model
+<!--         -->  1. No Forced Preemption (Server) (PREEMPT_NONE)
+<!--         -->  > 2. Voluntary Kernel Preemption (Desktop) (PREEMPT_VOLUNTARY)
+<!--         -->  3. Preemptible Kernel (Low-Latency Desktop) (PREEMPT__LL) (NEW)
+<!--         -->  4. Preemptible Kernel (Basic RT) (PREEMPT_RTB) (NEW)
+<!--         -->  5. Fully Preemptible Kernel (RT) (PREEMPT_RT_FULL) (NEW)
+<!--         -->  choice[1-5]: 5
+<!--         -->  ...
+<!--         -->  Debug preemptible kernel (DEBUG_PREEMPT) [Y/n/?] (NEW) n
+<!--         -->  ...
+<!--         -->  Preemption-off Latency Tracer (PREEMPT_TRACER) [N/y/?] (NEW)
+<!--         -->  Scheduling Latency Tracer (SCHED_TRACER) [Y/n/?] y
+<!--         -->  Scheduling Latency Histogram (WAKEUP_LATENCY_HIST) [N/y/?] (NEW)
+<!--         -->  Missed Timer Offsets Histogram (MISSED_TIMER_OFFSETS_HIST) [N/y/?] (NEW)
+<!--         -->  ...
+<!--         -->  Enable RCU priority boosting (RCU_BOOST) [Y/n/?] (NEW)
+<!--         -->  Real-time priority to boost RCU readers to (RCU_BOOST_PRIO) [1] (NEW)
+<!--         -->  Milliseconds to delay boosting after RCU grace-period start (RCU_BOOST_DELAY) [500] (NEW)
+<!--         -->  ...
+<!--         -->  #
+<!--         -->  # configuration written to .config
+<!--   --></pre>
+          <p>Finally one can compile the kernel (This takes a while to compile):</p>
+          <pre>
+<!--         -->  make                                # compile the kernel
+<!--         -->  sudo make modules_install install   # compile and install the kernel modules and then install the new kernel
+<!--   --></pre>
+          <p>Alternately one can do the following (as sudo): <code>make && make modules && make modules_install && make install</code>.
+             This is the the long hand version of the above.
+          </p>
+          <p>Update grub2 and reboot</p>
+          <pre>
+<!--         -->  sudo /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+<!--         -->  sudo reboot
+<!--   --></pre>
+          <p>To set default kernel as rt edit the GRUB_DEFAULT key in <code>/etc/default/grub</code> and set it to the entry corresponding to the rt kernel,
+             for eg: <code>GRUB_DEFAULT=1</code> corresponds to the second entry.<br>
+             To run headless using AMT/VNC one must also add the correct modeset corresponding to the video card/driver on the instrument controller.
+             If you don't remember just use <code>nomodeset</code>. Once finished make sure to run <code>mkconfig</code>.
+          </p>
+          <p>Verify that the preempt-rt kernel is booted and check that the timer resolution is 1ns</p>
+          <pre>
+<!--         -->  uname -a
+<!--         -->  grep resolution /proc/timer_list
+<!--   --></pre>
+        <h2>ADDITIONAL PACKAGES</h2>
+          <ol type="1">
+            <li><b>Python & python packages:</b>
+              <pre>
+<!--         -->  sudo yum -y install python-devel
+<!--         -->  sudo easy_install pip
+<!--         -->  sudo yum -y install numpy python-matplotlib spyder scipy pydaqmx
+<!--         -->  sudo pip install "ipython[notebook]"
+<!--         -->  # these should be installed after base is compiled.
+<!--         -->  sudo pip install pyepics pcaspy
+<!--         -->  sudo yum install openssl-devel #crypto toolkit
+<!--       --></pre>
+            </li>
+            <li><b>Open-ssh server & telnet:</b>
+              <pre>
+<!--         -->  sudo yum -y install openssh-server  
+<!--         -->  sudo yum -y install telnet
+<!--       --></pre>
+            </li>
+            <li><b>Google Chrome:</b>
+              <pre>
+<!--         -->  # Create a file called /etc/yum.repos.d/google-chrom.repo 
+<!--         -->  sudo gedit --new-document /etc/yum.repos.d/google-chrome.repo
+<!--         -->  # Add the following:
+<!--         -->  # [google-chrome]
+<!--         -->  # name=google-chrome
+<!--         -->  # baseurl=http://dl.google.com/linux/chrome/rpm/stable/$basearch
+<!--         -->  # enabled=1
+<!--         -->  # gpgcheck=1
+<!--         -->  # gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
+
+<!--         -->  # Install:
+<!--         -->  sudo yum -y install google-chrome-stable
+<!--       --></pre>
+            </li>
+            <li><b>Cyclic test and stress ng:</b>
+              <p>This is required if you want to benchmark your rt kernel</p>
+              <pre>
+<!--         -->  sudo yum -y install numactl-devel                                     # pre-requisite for compiling cyclic test.
+<!--         -->  git clone https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+<!--         -->  sudo cp -R rt-tests /usr/                                             # copy it into the /usr directory.
+<!--         -->  cd /usr/rt-tests && sudo make all
+<!--         -->  sudo cp ./cyclictest /usr/bin/
+<!--       --></pre>
+            </li>
+            <li><b>Network Time Protocol (NTP) service:</b>
+              <p> We want to synchronize our computers clock to a reliable time source preferably a network time server.
+                  To do this first make sure that the ntp package is installed on your system. In our lab we use the NIST
+                  time server to synchronize all the clocks on our servers. NTP communicates to these network servers via a
+                  UDP protocol, so make sure that the UDP port 123 is not being blocked by your router. Then just do the following:
+              </p> 
+              <pre>
+<!--         -->  sudo yum -y install ntp     # installs the ntp service
+<!--         -->  ntpdate time.nist.gov       # sync with nist time source
+<!--         -->  sudo gedit /etc/ntp.conf    # edit the ntp configuration file to sync on startup
+<!--         -->  # Add the following lines:
+<!--         -->  server time.nist.gov iburst # iburst: if the server is unreachable send a burst of 8 packets instead of 1
+<!--         -->  server 127.127.1.0          # incase we loose internet connection, this will treat the local clock as reference
+<!--         -->  fudge 127.127.1.0 stratum 10
+<!--         -->  # Save the config file and run the following
+<!--         -->  sudo chkconfig ntpd on      # set the service to run on startup
+<!--         -->  sudo service ntpd start     # start the service
+<!--       --></pre>
+            </li> 
+            <li><b>NIDAQMxBase:</b>
+              <p>This is required for the usb digital I/O daq devices we use</p>
+              <pre>
+<!--         -->  sudo cp   
+<!--         -->  sudo yum -y install libstdc++.i686                                  
+<!--         -->  sudo yum -y install glibc.i686                                         
+<!--         -->  sh INSTALL
+<!--         -->  sudo yum -y install libXinerama.i686
+<!--         -->  sudo yum -y install libGL.i686
+<!--       --></pre>
+
+            </li>           
+          </ol>
+        <h2>COMPILING EPICS BASE, EXTENSIONS & SYNAPPS SUPPORT</h2>
+          <p>
+            In our lab we are currently using base-3.14.12.5. The compile procedure will be slightly different depending on your version of base. 
+          </p>
+          <p>
+            Set the site environment first in .bashrc file or /etc/environment (requires reboot if variables are set in environment file but this makes the variables visible to all users, More detail here: https://help.ubuntu.com/community/EnvironmentVariables). The following variables need to be set (some of these are optional but recommended):
+          </p>
+          <pre>
+<!--     -->  PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/admin/Desktop/epics/extensions/bin/linux-x86_64:/home/admin/Desktop/epics/base-3.14.12.5/bin/linux-x86_64:"
+<!--     -->  EPICS_ROOT=< path to epics root directory >
+<!--     -->  EPICS_BASE=${EPICS_ROOT}/base-3.14.12.5
+<!--     -->  EPICS_HOST_ARCH=linux-x86_64
+<!--     -->  EPICS_BASE_BIN=${EPICS_BASE}/bin/${EPICS_HOST_ARCH}
+<!--     -->  EPICS_BASE_LIB=${EPICS_BASE}/lib/${EPICS_HOST_ARCH}
+<!--     -->  EPICS_CA_AUTO_ADDR_LIST=YES
+<!--     -->  EPICS_IOC_LOG_PORT=7004
+<!--     -->  EPICS_CA_MAX_ARRAY_BYTES=1073741824 
+<!--     -->  # NTP time server ip address.  Uses boot host if not set.
+<!--     -->  EPICS_TS_NTP_INET=129.6.15.30
+<!--     -->  # Prompt string
+<!--     -->  IOCSH_PS1="[epics@ipl]:~$ "
+<!--     -->  # Number of lines of command history to keep.
+<!--     -->  IOCSH_HISTSIZE=100
+<!--     -->  EPICS_IOC_LOG_FILE_LIMIT=1073741824 
+<!--     -->  EPICS_IOC_LOG_INET=xxx.xxx.x.x # (set the ip address where iocLogServer is started)
+<!--     -->  LD_LIBRARY_PATH=/usr/local/lib
+<!--   --></pre>
+          <h3>Base</h3>
+            <p>Edit the <code>$EPICS_BASE/configure/CONFIG_SITE</code> file to make sure the following is set:</p>
+            <pre>
+<!--       -->  # Use POSIX thread priority scheduling (YES or NO)
+<!--       -->  USE_POSIX_THREAD_PRIORITY_SCHEDULING = YES
+<!--       -->  STATIC_BUILD=NO
+<!--       -->  SHARED_LIBRARIES=YES
+<!--     --></pre>       
+            <p>Finally compile epics base:</p>
+            <pre>
+<!--       -->  cd ${EPICS_BASE}
+<!--       -->  sudo yum install -y readline-devel
+<!--       -->  make
+<!--     --></pre>
+          <h3>Extensions</h3>
+            <p>We require the following extensions:</p>
+            <ol type="1">
+              <li>
+                msi # required for devIocStats
+              </li>
+              <li>
+                procServ (latest version) # to run iocs as daemon.<br />
+                To compile procserv get the modified sources (procserv.cc and procserv.h) from the share drive and place it in the src directory. Then compile as follow:
+                <pre>
+<!--           -->  ./configure --enable-access-from-anywhere
+<!--           -->  make
+<!--           -->  sudo make install # this puts the executable in /usr/local/bin
+<!--         --></pre>
+              </li>
+            </ol>
+            <p>Edit the <code>${EPICS_EXTENSIONS}/configure/RELEASE</code> file to make sure the following are defined</p>
+              <code>EPICS_base=$((TOP)/../base-3.14.12.5</code><br />
+              <code>EPICS_EXTENSIONS=$(TOP)</code><br />
+            <p>Edit the <code>${EPICS_EXTENSIONS}/src/Makefile</code> to make sure the following are defined properly</p>
+              <code>EXTENSION_MSI = msi-1-7  # or whatever you name the msi directory</code><br />
+            <p>Finally compile:</p>
+            <pre>
+<!--       -->  cd ${EPICS_EXTENSIONS}
+<!--       -->  make
+<!--     --></pre>
+          <h3>Support</h3>
+            <p>Make sure re2c is installed. It is required for compiling sequencer.
+            </p>
+            <pre>
+<!--       -->  ./configure
+<!--       -->  make 
+<!--       -->  sudo make install # this puts the executable in /usr/local/bin
+<!--     --></pre>
+            <p>If you are using a gpib controller, linux gpib drivers must be installed.</p>
+            <pre>
+<!--       -->  su # perform this as root if installing the package in /usr/ directory
+<!--       -->  cd /usr/linux-gpib-4.0.2             
+<!--       -->  ./configure
+<!--       -->  make 
+<!--       -->  make install # this puts the executable in /usr/local/bin
+<!--     --></pre>
+            <p> This installs the executables ibterm, ibtest in /usr/local/bin. Next add the user to the gpib group.
+                This is so that we dont have to set permissions on /dev/gpib[0,1,2..] everytime on boot. We also want
+                to make sure that the gpib lib directory is visible, since we compile base dynamically we need to link to 
+                libgpib.so. Here's how I do this.
+            </p>
+            <pre>
+<!--       -->  sudo usermod -a -G gpib ${USER}
+<!--       -->  sudo gedit --new-document /etc/ld.so.conf.d/gpib-x86_64.conf             
+<!--       -->  # add the follwing and save the document.
+<!--       -->  /usr/local/lib
+<!--       -->  sudo ldconfig -v
+<!--     --></pre>
+
+            <p>I usually compile the following modules in synApps support. I have tested these to be stable versions (i.e. no compile errors provided you configure them properly). I would like to point out that the support modules are also inter-dependent. You can check the module dependencies in <code>$(SUPPORT)/Makefile</code>
+            </p>
+            <ol type="1">
+              <li>
+                <b>areaDetector-2-2:</b><br/>
+                To compile this module we need the following pre-requisites to be properly compiled:
+                  <ol type="1">
+                    <li>
+                      libTiff
+                    </li>
+                    <li>
+                      zlib
+                    </li>
+                    <li>
+                      libjpeg
+                    </li>
+                    <li>
+                      libxml2
+                    </li>
+                    <li>
+                      szip
+                    </li>
+                    <li>
+                      hdf5
+                    </li>
+                    <li>
+                      graphicsmagick
+                    </li>
+                    <li>
+                      png12, Xext, X11, freetype, bzip
+                      <pre>
+<!--                 -->  sudo yum install libpng12-devel freetype-devel libX11-devel libXext-devel bzip2-devel
+<!--               --></pre>
+                    </li>
+                  </ol>
+              </li>
+              <li>
+                <b>asyn-4-26:</b><br/>
+                To optionally include linux gpib, set LINUX_GPIB=YES in <code>$(ASYN)/configure/CONFIG_SITE</code>
+              </li>
+              <li>
+                <b>autosave-5-7-1, busy-1-6-1, calc-3-2, caputRecorder-1-4-2, ip-2-16, ipac-2-12, sscan-2-10-1, std-3-4, stream-2-6:</b><br />
+                These should compile without any modifications.
+              </li>
+              <li>
+                <b>devIocStats-3-1-14:</b><br />
+                msi (macro substitution and expansion tool) should be compiled. Then point the ioc stats module to the location 
+                of msi in <br />
+                <code>$(DEVIOCSTATS)/configure/CONFIG_SITE</code><br />
+                Change the following, for example:<br />
+                <code>MSI=/home/admin/Desktop/epics/extensions/bin/$(EPICS_HOST_ARCH)/msi</code>
+              </li>
+              <li>
+                <b>motor-6-9:</b><br />
+                To use linux gpib for motor drivers add the following line in <code>$(MOTOR)/motorExApp/WithAsyn/Makefile</code>:<br />
+                <code>COMMONDBDS += drvLinuxGpib.dbd</code><br />
+                Comment out the following motor drivers. They usually give compile errors and we don't use these motors in our lab anyways. cd to <code>$(MOTOR)/motorApp/Makefile</code> and comment out the following:
+                <pre>
+<!--          -->  #DIRS += HytecSrc
+<!--          -->  #HytecSrc_DEPEND_DIRS = MotorSrc
+
+<!--          -->  #DIRS += PhytronSrc
+<!--          -->  #PhytronSrc_DEPEND_DIRS = MotorSrc
+
+<!--          -->  # Install the edl files (We use qt as our client anyways.)
+<!--          -->  #DIRS += opi
+<!--        --></pre>
+               <p>Edit the <code>$(MOTOR)/iocBoot/iocWithAsyn/Makefile</code>. Change the ARCH variable to <code>$(EPICS_HOST_ARCH)</code>
+                  i.e. in this case <code>ARCH=linux-x86_64</code>. Also make sure that envPaths file is being built i.e. <code>TARGETS+=envPaths</code>.
+               </p>
+              </li>
+              <li>
+                <b>seq-2-1-18:</b><br />
+                re2c (lexer generator) should be compiled and in your path (<code>/usr/local/bin/</code>).
+                Then point the sequencer module to the location of re2c in:
+                <code>$(SNSEQ)/configure/CONFIG_SITE</code><br />
+                Uncomment the following (If it is in your path):<br />
+                <code>RE2C = re2c$(HOSTEXE)</code>
+              </li>
+            </ol>
+            <p>Now we are ready to compile synApps support:</p>
+            <pre>
+<!--       -->  make release # This makes our release versions common throughout the synapps directory
+<!--       -->  make             
+<!--     --></pre>
+            <p>Finally disable the firewall so that your iocs are visible over the network</p>
+            <pre>
+<!--       -->  sudo systemctl stop firewalld     # stops the firewall service for current user session only
+<!--       -->  sudo systemctl disable firewalld  # disables the firewall service permanently            
+<!--     --></pre>
+            <p>For serial ports r/w permissions must be set. A permanent solution around this is to add the user to the dialout group or to use symbolic links via udev rules.</p>
+            <pre>
+<!--       -->  sudo usermod -a -G dialout ${USER}       
+<!--     --></pre>
+        <h2>REFERENCES</h2>
+          <ol type="I">
+            <li>
+              <a href="https://www.osadl.org/Realtime-Preempt-Kernel.kernel-rt.0.html#Installation">
+                OSADL-Realtime-Preempt-Kernel installation.
+              </a>
+            </li>
+            <li>
+              <a href="http://jensd.be/589/linux/complile-and-use-a-realtime-kernel-on-centos-7-or-rhel-7">
+                Use a realtime kernel on centos-7 or rhel-7 
+              </a>
+            </li>
+            <li>
+              <a href="https://rt.wiki.kernel.org/index.php/Cyclictest">
+                Cyclictest
+              </a>
+            </li>
+            <li>
+              <a href="https://wiki-ext.aps.anl.gov/epics/index.php/How_To_Use_Posix_Thread_Priority_Scheduling_under_Linux">
+                EPICS with Real time priority scheduling 
+              </a>
+            </li>   
+            <li>
+              <a href="https://help.ubuntu.com/community/EnvironmentVariables)">
+                Setting Environment Variables in Linux 
+              </a>
+            </li>
+            <li>
+              <a href="https://community.linuxmint.com/tutorial/view/842">
+                Black screen fix when running headless on Linux-1
+              </a>
+            </li>
+            <li> 
+              <a href="https://software.intel.com/en-us/forums/intel-business-client-software-development/topic/544734">
+                Black screen fix when running headless on Linux-2
+              </a>            
+            </li>
+      </div>
+    </body>
+</html>

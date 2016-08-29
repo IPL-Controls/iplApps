@@ -1,0 +1,38 @@
+   --------------------------------------------------------------------------
+
+  Table of Contents
+
+     * What is iplApps?
+     * Supported platforms
+     * Supported compilers
+     * Software requirements
+
+   --------------------------------------------------------------------------
+
+  What is iplApps?
+
+     The imaging physics laboratory application (iplApps) support is an
+     extensible set of device support modules which relies on EPICS and synApps support.  
+     This control architecture is currently being used to control hardware for 
+	 miscellaneous imaging experiments at IPL.
+      
+  Supported platforms
+  
+     * win32-x86
+     * windows-x64
+     * linux-x86
+     * linux-x86_64
+
+  Supported compilers
+
+     This version has been built and tested using the host
+     vendor's C and C++ compilers, as well as the GNU gcc and g++ compilers.
+     The GNU cross-compilers work for all cross-compiled targets. You may
+     need the C and C++ compilers to be in your search path to perfrom
+     builds.
+
+  Software requirements
+
+    EPICS base (3.14.12.x) and synApps support modules must be built on your system.
+    For win32-x86 and windows-x64 arch, batch scripts are provided for EPICS and synApps 
+    build (Some configuration might be required)

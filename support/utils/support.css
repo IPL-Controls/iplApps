@@ -1,0 +1,111 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary,time, mark, audio, video {
+		font-style: normal;
+		font-family: "Times New Roman", Times, serif;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+	}
+
+html {
+	margin-left: 3.1em;
+	background-color: white;
+	background-repeat: no-repeat;
+	background-size:100% 100%;
+	color: black;	
+}
+
+body {
+	margin-left: 3.1em;
+	background-color: white;
+}
+
+h1 {
+	color: #005c99;
+	border-top-style: hidden;
+    border-right-style: hidden;
+    border-bottom-style: solid;
+    border-left-style: hidden;
+	border-color: grey;
+	border-width: 0.0625em;
+	font-size: 1.4em;
+}
+
+h2 {
+	color: #005c99;
+	border-spacing: 0.4px
+	border-top-style: hidden;
+    border-right-style: hidden;
+    border-bottom-style: solid;
+    border-left-style: hidden;
+	border-color: lightgrey;
+	border-width: 0.0625em;
+	font-size: 1.2em;
+}
+
+p {
+	font-size: 1em;
+}
+
+dl {
+	margin: 0em;
+}
+
+dd {
+	margin-left: 2em;
+}
+
+ol {
+	margin: 5px 5px 5px 50px;
+}
+
+li {
+	margin-bottom: 0.625em;
+}
+
+pre {
+	margin-left: 1.5em;
+	font-size: 0.9em;
+    font-family: "Courier 10 Pitch", Courier, monospace; 
+    white-space: pre;
+    display: block;
+    padding: 0.5em 0.5em 0.5em 0em;
+	border-style: solid;
+    border-color: #005c99;
+    background-color: #e6f5ff;
+	border-width: 0.0625em 0.0625em 0.0625em 0.25em;
+}
+
+code {
+	margin: 0em;
+	font-family: "Courier 10 Pitch", Courier, monospace; 
+	font-size: 0.9em;
+
+}
+
+a:link {
+	color: blue;
+	text-decoration: none;
+}
+
+a:visited {
+	color: blue;
+}
+
+a:hover {
+	background-color: lightyellow;
+	text-decoration: underline;
+}
+
+a:active {
+	color: #ccc
+}
+
+header {
+	font: bold 2em Times, Helvetica, sans-serif;
+	position: absolute;
+	text-shadow: 0px 2px 3px #555;
+	border-bottom: 3px groove #B20000;
+	box-shadow: 5px 8px 3px #888888;
+	width: 1340px;
+} 
+

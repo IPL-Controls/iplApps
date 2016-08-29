@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+      <title>HOW TO GUIDE: DEVIOCSTATS</title>
+      <link rel="stylesheet" type="text/css" href="../utils/support.css" />
+      <!-- Script that generates the Table of Contents -->
+      <script type="text/javascript"
+      src="http://epics-pvdata.sourceforge.net/script/tocgen.js">
+      </script>
+    </head>
+
+    <body>
+      <div class="head">
+        <h1>HOW TO GUIDE: DEVIOCSTATS</h1>
+        <dl>
+          <dt>Latest version:</dt>
+          <dd>
+            <a href="devIocStats.html">devIocStats.html</a>
+          </dd>
+          <dt>Description:</dt>
+          <dd>This note summarizes the steps needed to add ioc stats support to an IOC.</dd>
+          <dt>DevIocStats version:</dt>
+          <dd>3-1-14</dd>
+          <dt>EPICS Base version:</dt>
+          <dd>3.14.12.5</dd>
+          <dt>Editors:</dt>
+          <dd>Alireza Panna, NIH</dd>
+        </dl>
+      </div>
+    
+      <div id="toc">
+        <h2 class="nocount" style="page-break-before: always">Table of Contents</h2>
+      </div>
+    
+      <div id="contents" class="contents">
+        <h2>WHERE TO FIND IT</h2>
+          <p>The module is being developed at:</p>
+          <a href="https://github.com/epics-modules/iocStats">
+            iocStats-github
+          </a>
+        <h2>INTRODUCTION</h2>
+          <p>
+            DevIocStats provides support for records that show the health and status 
+            of an IOC, plus a few IOC control records.
+          </p>
+          <p>NOTES:</p>
+          <ol type="1">
+            <li>IOC Startup Counter - <code>$(P):START_CNT</code> keeps a count of the
+                number of times the ioc has started up. In order for it to
+                work properly, the record must be saved and restored across
+                ioc startup. This record is saved and restored  via the info_settings.sav and the info_settings.req file normally. For this to work the autosave module must be built and being used in your App
+            </li>
+          </ol>
+        <h2>ADDING DEVIOCSTATS SUPPORT TO YOUR APPLICATION</h2>
+          <p>
+            For the following <code>$(SYN_SUPPORT)</code> points to the synApps support directory and
+            xxx is the name of your application.
+          </p>
+          <ol type="1">
+            <li>Add the following lines to <code>$(TOP)/configure/RELEASE</code> file of your app
+              <pre>
+<!--         -->  DEVIOCSTATS=$(SYN_SUPPORT)/devIocStats-3-1-14
+<!--         -->  IOCADMIN=$(SYN_SUPPORT)/devIocStats-3-1-14/iocAdmin
+<!--       --></pre>
+            </li>
+            <li>Add the following two lines to the <code>xxxApp/src/Makefile</code>.
+              <pre>
+<!--         -->  ifdef DEVIOCSTATS
+<!--         -->    xxx_DBD += devIocStats.dbd iocAdmin.dbd
+<!--         -->    xxx_LIBS += devIocStats
+<!--         -->  endif
+<!--       --></pre>
+              The first line adds device support to the xxx.dbd file, the second includes devIocStats objects into the IOC binary.
+            </li>
+            <li>Add this line to <code>xxxApp/Db/Makefile</code>
+              <pre>
+<!--         -->  ifdef DEVIOCSTATS
+<!--         -->    DB_INSTALLS += $(DEVIOCSTATS)/db/iocAdminSoft.db
+<!--         -->    DB_INSTALLS += $(DEVIOCSTATS)/db/iocAdminScanMon.db
+<!--         -->  endif
+<!--       --></pre>
+              This is for convenience. It will copy the iocAdminSoft.db and the iocAdminScanMon.db file to the <code>$(TOP)/db</code> of the IOC when the app is built.<br />
+              At this point you should be able to build the app without any errors. To use devIocStats for your app you have to add the following lines to the st.cmd (IOC startup file of your app)
+            </li>
+            <li> Add the following lines to <code>$(TOP)/iocBoot/$(IOC)/st.cmd</code>
+              <pre>
+<!--         -->  epicsEnvSet("ENGINEER","<yourname>")
+<!--         -->  # can be longer than 40 characters:
+<!--         -->  epicsEnvSet("LOCATION","<ioclocation>")
+<!--         -->  epicsEnvSet("STARTUP","$(TOP)/iocBoot/$(IOC)")
+<!--         -->  epicsEnvSet("ST_CMD","startup.cmd")
+    
+<!--         -->  cd $(TOP)
+<!--         -->  # Load the record instance (the iocAdmin database)
+<!--         -->  dbLoadRecords("db/iocAdminSoft.db", "IOC=$(P)")
+<!--         -->  # If SCAN monitoring is required:
+<!--         -->  dbLoadRecords("db/iocAdminScanMon.db", "IOC=$(P)")
+<!--       --></pre>
+            </li>
+          </ol>
+        <h2>SUMMARY FOR END USERS</h2>
+          <p>
+            In addition to monitoring the health of an ioc is that when used with procServ it allows the user to perform complete restart of an ioc or start/stop iocs. It also provides process id information for the ioc, and when used with autosave it monitors the restart count of an ioc. This application is very helpful for troubleshooting an ioc.
+          </p>
+        <h2>REFERENCES</h2>
+          <ol type="I">
+            <li>
+              <a href="http://www.slac.stanford.edu/grp/ssrl/spear/epics/site/devIocStats/">
+                devIocStats-SLAC Documentation.
+              </a>
+            </li>
+      </div>
+    </body>
+</html>

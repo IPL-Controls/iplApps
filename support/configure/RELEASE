@@ -1,0 +1,56 @@
+#FILENAME:      RELEASE
+#USAGE:         Specify directory paths to iplApps support modules
+#Modified By:   Author: Alireza Panna
+#Last Modified: Date: Fri, 10 Apr 2015 
+#Log:			5/26/2015: base, synapps and iplapps paths are now
+#						   set by checking for EPICS_HOST_ARCH.	
+
+#NOTES
+#     - To remove modules from the build, delete or comment out the
+#       module name.
+#	  - EPICS_HOST_ARCH must be defined in your environment.
+
+$(info $$EPICS_HOST_ARCH is ${EPICS_HOST_ARCH})
+
+#EPICS_BASE=/home/admin/Desktop/epics/base-3.14.12.5
+#SYN_SUPPORT=/home/admin/Desktop/epics/support
+#IPL_SUPPORT=/home/admin/Desktop/epics/iplApps/support
+
+EPICS_BASE=C:/Epics/base-3.14.12.5
+SYN_SUPPORT=C:/Epics/support
+IPL_SUPPORT=C:/Epics/iplApps/support
+
+# Define synApps support modules here to make release consistent.
+AREA_DETECTOR=$(SYN_SUPPORT)/areaDetector-2-5
+ADCORE=$(SYN_SUPPORT)/areaDetector-2-5/ADCore
+ADBINARIES=$(SYN_SUPPORT)/areaDetector-2-5/ADBinaries 
+ASYN=$(SYN_SUPPORT)/asyn-4-29
+AUTOSAVE=$(SYN_SUPPORT)/autosave-5-7-1
+BUSY=$(SYN_SUPPORT)/busy-1-6-1
+CALC=$(SYN_SUPPORT)/calc-3-2
+CAPUTLOG=$(SYN_SUPPORT)/caPutLog-3-4
+CAPUTRECORDER=$(SYN_SUPPORT)/caputRecorder-1-4-2
+DEVIOCSTATS=$(SYN_SUPPORT)/devIocStats-3-1-14
+IOCADMIN=$(SYN_SUPPORT)/devIocStats-3-1-14/iocAdmin
+SNCSEQ=$(SYN_SUPPORT)/seq-2-1-18
+SSCAN=$(SYN_SUPPORT)/sscan-2-10-1
+STD=$(SYN_SUPPORT)/std-3-4
+STREAM=$(SYN_SUPPORT)/stream-2-6
+
+# Define iplApps support modules here to make release consistent.
+ADNIKONKS=$(IPL_SUPPORT)/ADNikonKs
+ADVARIAN=$(IPL_SUPPORT)/ADVarian
+#AGILENT=$(IPL_SUPPORT)/agilentHPE3631A
+CPI=$(IPL_SUPPORT)/cpi
+KEITHLEY=$(IPL_SUPPORT)/keithleyK2410
+OXFORD=$(IPL_SUPPORT)/oxford
+PROCSERVCONTROL=$(IPL_SUPPORT)/procServControl
+SCAN_SUPPORT=$(IPL_SUPPORT)/scanSupport
+SEQ_CONTROL=$(IPL_SUPPORT)/seqControl
+SOURCE_RAY=$(IPL_SUPPORT)/sri
+STANFORD_RESEARCH=$(IPL_SUPPORT)/srsDS345
+
+
+
+
+
