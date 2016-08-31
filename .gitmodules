@@ -1,0 +1,3 @@
+[submodule "support/oxford"]
+	path = support/oxford
+	url = https://github.com/apanna/oxford.git
