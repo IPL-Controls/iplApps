@@ -10,3 +10,6 @@
 [submodule "support/keithleyK2410"]
 	path = support/keithleyK2410
 	url = https://github.com/apanna/keithleyK2410.git
+[submodule "support/procServControl"]
+	path = support/procServControl
+	url = https://github.com/apanna/procServControl.git
