@@ -7,3 +7,6 @@
 [submodule "support/srsDS345"]
 	path = support/srsDS345
 	url = https://github.com/apanna/srsDS345.git
+[submodule "support/keithleyK2410"]
+	path = support/keithleyK2410
+	url = https://github.com/apanna/keithleyK2410.git
