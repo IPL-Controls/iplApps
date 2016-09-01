@@ -4,3 +4,6 @@
 [submodule "support/scanSupport"]
 	path = support/scanSupport
 	url = https://github.com/apanna/scanSupport.git
+[submodule "support/srsDS345"]
+	path = support/srsDS345
+	url = https://github.com/apanna/srsDS345.git
