@@ -16,3 +16,6 @@
 [submodule "support/nikonKsSync"]
 	path = support/nikonKsSync
 	url = https://github.com/apanna/nikonKsSync.git
+[submodule "support/runControl"]
+	path = support/runControl
+	url = https://github.com/apanna/runControl.git
