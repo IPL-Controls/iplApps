@@ -13,3 +13,6 @@
 [submodule "support/procServControl"]
 	path = support/procServControl
 	url = https://github.com/apanna/procServControl.git
+[submodule "support/nikonKsSync"]
+	path = support/nikonKsSync
+	url = https://github.com/apanna/nikonKsSync.git
