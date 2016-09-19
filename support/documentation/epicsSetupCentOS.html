@@ -168,13 +168,12 @@
           <ol type="1">
             <li><b>Python & python packages:</b>
               <pre>
-<!--         -->  sudo yum -y install python-devel
 <!--         -->  sudo easy_install pip
 <!--         -->  sudo yum -y install numpy python-matplotlib spyder scipy pydaqmx
 <!--         -->  sudo pip install "ipython[notebook]"
 <!--         -->  # these should be installed after base is compiled.
 <!--         -->  sudo pip install pyepics pcaspy
-<!--         -->  sudo yum install openssl-devel #crypto toolkit
+<!--         -->  sudo yum install openssl-devel
 <!--       --></pre>
             </li>
             <li><b>Open-ssh server & telnet:</b>
@@ -199,7 +198,7 @@
 <!--         -->  sudo yum -y install google-chrome-stable
 <!--       --></pre>
             </li>
-            <li><b>Cyclic test and stress ng:</b>
+            <li><b>Cyclic test:</b>
               <p>This is required if you want to benchmark your rt kernel</p>
               <pre>
 <!--         -->  sudo yum -y install numactl-devel                                     # pre-requisite for compiling cyclic test.
@@ -236,7 +235,7 @@
 <!--         -->  sudo yum -y install glibc.i686                                         
 <!--         -->  sh INSTALL
 <!--         -->  sudo yum -y install libXinerama.i686
-<!--         -->  sudo yum -y install libGL.i686
+<!--         -->  sudo yum -y install mesa-libGL.i686
 <!--       --></pre>
 
             </li>           
@@ -279,7 +278,11 @@
             <p>Finally compile epics base:</p>
             <pre>
 <!--       -->  cd ${EPICS_BASE}
+<!--       -->  export EPICS_HOST_ARCH=linux-x86_64
 <!--       -->  sudo yum install -y readline-devel
+<!--       -->  make
+<!--       -->  export EPICS_HOST_ARCH=linux-x86
+<!--       -->  sudo yum install -y readline-devel.i686 glibc-devel.i686
 <!--       -->  make
 <!--     --></pre>
           <h3>Extensions</h3>
@@ -306,6 +309,9 @@
             <p>Finally compile:</p>
             <pre>
 <!--       -->  cd ${EPICS_EXTENSIONS}
+<!--       -->  export EPICS_HOST_ARCH=linux-x86_64
+<!--       -->  make
+<!--       -->  export EPICS_HOST_ARCH=linux-x86
 <!--       -->  make
 <!--     --></pre>
           <h3>Support</h3>
@@ -341,29 +347,73 @@
             </p>
             <ol type="1">
               <li>
-                <b>areaDetector-2-2:</b><br/>
+                <b>areaDetector:</b><br/>
                 To compile this module we need the following pre-requisites to be properly compiled:
                   <ol type="1">
                     <li>
-                      libTiff
+                      <a href="dl.maptools.org/dl/libtiff">
+                        libTiff
+                      </a>
+                        <pre>
+<!--                 s--> ./configure
+<!--                 --> make && sudo make install
+                        </pre>
                     </li>
                     <li>
-                      zlib
+                      <a href="https://github.com/madler/zlib/tree/v1.2.8">
+                        zlib
+                      </a>
+                        <pre>
+<!--                 --> ./configure
+<!--                 --> make && sudo make install
+                        </pre>
                     </li>
                     <li>
-                      libjpeg
+                      <a href="https://sourcefourge.net/projects/libjpeg-turbo/?source=typ_redirect">
+                        libjpeg 
+                      </a>
+                        <pre>
+<!--                 --> sudo yum install nasm
+<!--                 --> ./configure --prefix=/usr/local --mandir=/usr/share/man --with-jpeg8 --disable-static
+<!--                 --> make
+<!--                 --> make test
+<!--                 --> sudo make install
+                        </pre>
                     </li>
                     <li>
-                      libxml2
+                      <a href="ftp://xmlsoft.org/libxml2/">
+                        libxml2 
+                      </a>
+                        <pre>
+<!--                 --> ./configure
+<!--                 --> make
+<!--                 --> sudo make install
+                        </pre>
                     </li>
                     <li>
-                      szip
+                      <a href="ftp://ftp.hdfgroup.org/lib-external/">
+                        szip 
+                      </a>
+                        <pre>
+<!--                 --> ./configure --prefix=/usr/local
+<!--                 --> make
+<!--                 --> make check
+<!--                 --> sudo make install
+                        </pre>
                     </li>
                     <li>
-                      hdf5
+                      <a href="ftp://ftp.hdfgroup.org/HDF5">
+                        hdf5
+                      </a>
+                        <pre>
+<!--                 --> ./configure --prefix=/usr/local/hdf5 --with-szlib=/usr/local
+<!--                 --> make
+<!--                 --> make check
+<!--                 --> sudo make install && make check-install
+                        </pre>
                     </li>
                     <li>
-                      graphicsmagick
+                      graphicsmagick (optional)
                     </li>
                     <li>
                       png12, Xext, X11, freetype, bzip
