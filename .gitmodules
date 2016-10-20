@@ -19,3 +19,6 @@
 [submodule "support/runControl"]
 	path = support/runControl
 	url = https://github.com/apanna/runControl.git
+[submodule "support/galil"]
+	path = support/galil
+	url = https://github.com/apanna/galil.git
