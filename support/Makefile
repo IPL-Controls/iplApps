@@ -33,7 +33,7 @@ DIRS += $(ADVARIAN)
 RELEASE_FILES += $(ADVARIAN)/configure/RELEASE
 endif
 
-ifdef AGILENT_0
+ifdef AGILENT
 DIRS += $(AGILENT)
 RELEASE_FILES += $(AGILENT)/configure/RELEASE
 endif
@@ -41,6 +41,11 @@ endif
 ifdef CPI
 DIRS += $(CPI)
 RELEASE_FILES += $(CPI)/configure/RELEASE
+endif
+
+ifdef GALIL
+DIRS += $(GALIL)
+RELEASE_FILES += $(GALIL)/configure/RELEASE
 endif
 
 ifdef KEITHLEY
@@ -63,9 +68,9 @@ DIRS += $(SCAN_SUPPORT)
 RELEASE_FILES += $(SCAN_SUPPORT)/configure/RELEASE
 endif
 
-ifdef SEQ_CONTROL
-DIRS += $(SEQ_CONTROL)
-RELEASE_FILES += $(SEQ_CONTROL)/configure/RELEASE
+ifdef RUN_CONTROL
+DIRS += $(RUN_CONTROL)
+RELEASE_FILES += $(RUN_CONTROL)/configure/RELEASE
 endif
 
 ifdef SOURCE_RAY
