@@ -28,3 +28,6 @@
 [submodule "support/varianSync"]
 	path = support/varianSync
 	url = https://github.com/andrewgomella/varianSync.git
+[submodule "support/cpiSync"]
+	path = support/cpiSync
+	url = https://github.com/andrewgomella/cpiSync.git
