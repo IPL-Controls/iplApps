@@ -25,3 +25,6 @@
 [submodule "support/sri"]
 	path = support/sri
 	url = https://github.com/andrewgomella/sri.git
+[submodule "support/varianSync"]
+	path = support/varianSync
+	url = https://github.com/andrewgomella/varianSync.git
