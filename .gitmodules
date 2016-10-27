@@ -22,3 +22,6 @@
 [submodule "support/galil"]
 	path = support/galil
 	url = https://github.com/apanna/galil.git
+[submodule "support/sri"]
+	path = support/sri
+	url = https://github.com/andrewgomella/sri.git
