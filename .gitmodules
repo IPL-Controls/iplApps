@@ -31,3 +31,6 @@
 [submodule "support/cpiSync"]
 	path = support/cpiSync
 	url = https://github.com/andrewgomella/cpiSync.git
+[submodule "support/nikepics"]
+	path = support/nikepics
+	url = https://github.com/andrewgomella/nikepics.git
