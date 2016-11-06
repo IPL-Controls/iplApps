@@ -21,19 +21,19 @@ SYN_SUPPORT=C:/Epics/support
 IPL_SUPPORT=C:/Epics/iplApps/support
 
 # Define synApps support modules here to make release consistent.
-AREA_DETECTOR=$(SYN_SUPPORT)/areaDetector-2-5
-ADCORE=$(SYN_SUPPORT)/areaDetector-2-5/ADCore
-ADBINARIES=$(SYN_SUPPORT)/areaDetector-2-5/ADBinaries 
-ASYN=$(SYN_SUPPORT)/asyn-4-29
+AREA_DETECTOR=$(SYN_SUPPORT)/areaDetector
+ADCORE=$(SYN_SUPPORT)/areaDetector/ADCore
+ADBINARIES=$(SYN_SUPPORT)/areaDetector/ADBinaries 
+ASYN=$(SYN_SUPPORT)/asyn-4-30
 AUTOSAVE=$(SYN_SUPPORT)/autosave-5-7-1
 BUSY=$(SYN_SUPPORT)/busy-1-6-1
-CALC=$(SYN_SUPPORT)/calc-3-2
+CALC=$(SYN_SUPPORT)/calc-3-6-1
 CAPUTLOG=$(SYN_SUPPORT)/caPutLog-3-4
 CAPUTRECORDER=$(SYN_SUPPORT)/caputRecorder-1-4-2
 DEVIOCSTATS=$(SYN_SUPPORT)/devIocStats-3-1-14
 IOCADMIN=$(SYN_SUPPORT)/devIocStats-3-1-14/iocAdmin
-SNCSEQ=$(SYN_SUPPORT)/seq-2-1-18
-SSCAN=$(SYN_SUPPORT)/sscan-2-10-1
+SNCSEQ=$(SYN_SUPPORT)/seq-2-2-3
+SSCAN=$(SYN_SUPPORT)/sscan-2-10-2
 STD=$(SYN_SUPPORT)/std-3-4
 STREAM=$(SYN_SUPPORT)/stream-2-6
 
