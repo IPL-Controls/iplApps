@@ -34,3 +34,6 @@
 [submodule "support/nikepics"]
 	path = support/nikepics
 	url = https://github.com/andrewgomella/nikepics.git
+[submodule "support/ADNikonKs"]
+	path = support/ADNikonKs
+	url = https://github.com/andrewgomella/ADNikonKs.git
