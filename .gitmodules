@@ -37,3 +37,6 @@
 [submodule "support/ADNikonKs"]
 	path = support/ADNikonKs
 	url = https://github.com/andrewgomella/ADNikonKs.git
+[submodule "support/ADVarian"]
+	path = support/ADVarian
+	url = https://github.com/andrewgomella/ADVarian.git
