@@ -24,13 +24,19 @@ DIRS = $(SUPPORT_DIRS)
 
 ####################### User Modules #############################
 ifdef ADNIKONKS
-DIRS += $(ADNIKONKS)
-RELEASE_FILES += $(ADNIKONKS)/configure/RELEASE
+	# only build this module on windows arch
+	ifeq (($(findstring) win, $(EPICS_HOST_ARCH)), win)
+		DIRS += $(ADNIKONKS)
+		RELEASE_FILES += $(ADNIKONKS)/configure/RELEASE
+	endif
 endif
 
 ifdef ADVARIAN
-DIRS += $(ADVARIAN)
-RELEASE_FILES += $(ADVARIAN)/configure/RELEASE
+	# only build this module on windows arch
+	ifeq (($(findstring) win, $(EPICS_HOST_ARCH)), win)
+		DIRS += $(ADVARIAN)
+		RELEASE_FILES += $(ADVARIAN)/configure/RELEASE
+	endif
 endif
 
 ifdef AGILENT
