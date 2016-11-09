@@ -40,3 +40,6 @@
 [submodule "support/ADVarian"]
 	path = support/ADVarian
 	url = https://github.com/andrewgomella/ADVarian.git
+[submodule "support/cpi"]
+	path = support/cpi
+	url = https://github.com/andrewgomella/cpi.git
