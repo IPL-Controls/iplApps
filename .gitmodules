@@ -43,3 +43,6 @@
 [submodule "support/cpi"]
 	path = support/cpi
 	url = https://github.com/andrewgomella/cpi.git
+[submodule "support/agilentHPE3631A"]
+	path = support/agilentHPE3631A
+	url = https://github.com/andrewgomella/agilentHPE3631A.git
