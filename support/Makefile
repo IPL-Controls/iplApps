@@ -39,9 +39,9 @@ ifdef ADVARIAN
 	endif
 endif
 
-ifdef AGILENT
-DIRS += $(AGILENT)
-RELEASE_FILES += $(AGILENT)/configure/RELEASE
+ifdef AGILENT_HPE3631A
+DIRS += $(AGILENT_HPE3631A)
+RELEASE_FILES += $(AGILENT_HPE3631A)/configure/RELEASE
 endif
 
 ifdef CPI
@@ -54,9 +54,9 @@ DIRS += $(GALIL)
 RELEASE_FILES += $(GALIL)/configure/RELEASE
 endif
 
-ifdef KEITHLEY
-DIRS += $(KEITHLEY)
-RELEASE_FILES += $(KEITHLEY)/configure/RELEASE
+ifdef KEITHLEY_K2410
+DIRS += $(KEITHLEY_K2410)
+RELEASE_FILES += $(KEITHLEY_K2410)/configure/RELEASE
 endif 
 
 ifdef OXFORD
@@ -84,9 +84,9 @@ DIRS += $(SOURCE_RAY)
 RELEASE_FILES += $(SOURCE_RAY)/configure/RELEASE
 endif
 
-ifdef STANFORD_RESEARCH
-DIRS += $(STANFORD_RESEARCH)
-RELEASE_FILES += $(STANFORD_RESEARCH)/configure/RELEASE
+ifdef SRS_DS345
+DIRS += $(SRS_DS345)
+RELEASE_FILES += $(SRS_DS345)/configure/RELEASE
 endif
 
 ACTIONS += uninstall realuninstall distclean cvsclean
