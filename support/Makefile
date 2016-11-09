@@ -24,7 +24,7 @@ DIRS = $(SUPPORT_DIRS)
 
 ####################### User Modules #############################
 ifdef ADNIKONKS
-	# only build this module on windows arch
+	# only build this module for windows arch
 	ifeq (($(findstring) win, $(EPICS_HOST_ARCH)), win)
 		DIRS += $(ADNIKONKS)
 		RELEASE_FILES += $(ADNIKONKS)/configure/RELEASE
@@ -32,7 +32,7 @@ ifdef ADNIKONKS
 endif
 
 ifdef ADVARIAN
-	# only build this module on windows arch
+	# only build this module for windows arch
 	ifeq (($(findstring) win, $(EPICS_HOST_ARCH)), win)
 		DIRS += $(ADVARIAN)
 		RELEASE_FILES += $(ADVARIAN)/configure/RELEASE
