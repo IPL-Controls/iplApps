@@ -9,7 +9,7 @@
 #       module name.
 #	  - EPICS_HOST_ARCH must be defined in your environment.
 
-$(info $$EPICS_HOST_ARCH is ${EPICS_HOST_ARCH})
+$(info $EPICS_HOST_ARCH is ${EPICS_HOST_ARCH})
 
 #EPICS_BASE=/home/admin/Desktop/epics/base-3.14.12.5
 #SYN_SUPPORT=/home/admin/Desktop/epics/support
@@ -20,9 +20,9 @@ SYN_SUPPORT=C:/Epics/support
 IPL_SUPPORT=C:/Epics/iplApps/support
 
 # Define synApps support modules here to make release consistent.
-AREA_DETECTOR=$(SYN_SUPPORT)/areaDetector
-ADCORE=$(SYN_SUPPORT)/areaDetector/ADCore
-ADBINARIES=$(SYN_SUPPORT)/areaDetector/ADBinaries 
+AREA_DETECTOR=$(SYN_SUPPORT)/areaDetector-2-5
+ADCORE=$(SYN_SUPPORT)/areaDetector-2-5/ADCore
+ADBINARIES=$(SYN_SUPPORT)/areaDetector-2-5/ADBinaries 
 ASYN=$(SYN_SUPPORT)/asyn-4-30
 AUTOSAVE=$(SYN_SUPPORT)/autosave-5-7-1
 BUSY=$(SYN_SUPPORT)/busy-1-6-1
@@ -39,8 +39,8 @@ STREAM=$(SYN_SUPPORT)/stream-2-6
 # Define iplApps support modules here to make release consistent.
 ADNIKONKS=$(IPL_SUPPORT)/ADNikonKs
 ADVARIAN=$(IPL_SUPPORT)/ADVarian
-#AGILENT_HPE3631A=$(IPL_SUPPORT)/agilentHPE3631A
-#CPI=$(IPL_SUPPORT)/cpi
+AGILENT_HPE3631A=$(IPL_SUPPORT)/agilentHPE3631A
+CPI=$(IPL_SUPPORT)/cpi
 GALIL=$(IPL_SUPPORT)/galil
 KEITHLEY_K2410=$(IPL_SUPPORT)/keithleyK2410
 OXFORD=$(IPL_SUPPORT)/oxford
