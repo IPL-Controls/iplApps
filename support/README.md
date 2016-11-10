@@ -1,9 +1,11 @@
-Run make in support, and it references configure/RELEASE.
+iplApps
+=======
+
 
 REQUISITES
 ==========
-* EPICS base must be compiled.
-* The following synApps support modules are also required: areaDetector, devIocStats, caPutLog, motor, sscan, asyn, calc, busy, seq, stream, autosave.
+* EPICS base must be compiled. All the apps provided in iplApps have been tested and are compatible with base >= 3.14
+* The following synApps support modules are also required: areaDetector, asyn, autosave, busy, devIocStats, calc, caPutLog, caputRecorder, motor, seq, sscan, stream.
 
 SITE CONFIGURATION
 ==================
@@ -15,7 +17,7 @@ Set the values of variables to indicate what resources your system has.
         
 configure/RELEASE
 -----------------
-Specify paths to EPICS base, synapps support modules, and to IPL modules. After modifying this file, run "make release" in support to propagate changes to all module RELEASE files.
+Specify paths to EPICS base, synApps support modules, and to iplApps support modules. After modifying this file, run "make release" in support to propagate changes to all module RELEASE files.
 
 Makefile
 --------
@@ -53,6 +55,11 @@ After adding a module
 * run "make rebuild" in any module that uses the new module
 
 Optionally on linux OS you might have to change permissions
-``        
-sudo chmod -R 777 support
-``
+`sudo chmod -R 777 support`
+
+To get a clone of the full iplApps support distribution perform a recursive clone of this repository:
+`git clone --recursive https://github.com/IPL-Controls/iplApps.git`
+
+* [Release notes](RELEASE.md)
+* [Report an issue with iplApps](https://github.com/IPL-Controls/iplApps/issues)  
+* [documentation](https://github.com/IPL-Controls/iplApps/tree/master/support/documentation/README.1st)

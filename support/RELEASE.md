@@ -2,15 +2,25 @@ iplApps Releases
 ================
 
 The latest untagged master branch can be obtained at
-<https://bitbucket.org/iplshare/iplapps>
+<https://github.com/IPL-Controls/iplApps>
 
 
 Release Notes
 =============
 The release notes below provide a short summary of the most significant items from the submodules.
 
-v4.0 (December XXX 2016)
+v3-1 (December XXX 2016)
 ----
+* moved repository to [GitHub](https://github.com/IPL-Controls/iplApps)
+* Updated $(IPL_SUPPORT)/Makefile so that ADNikonKs and ADVarian only build for windows architecture
+* Rename seqControl module to runControl
+* added epicsapps.py in util which now handles the autosave and ioc stats functionality for pcas drivers
+* update cpi driver to work with cmp-200 generator.
+* Added asyn driver for galil motor controllers. This is originally forked from (https://github.com/motorapp/Galil-3-0) and modified to use iplapps build rules.
+* Major enhancements to nikonKsSync and varianSync.
+* update application makefiles to build for seq 2.2 and maintain compatibility with seq 2.1
+* fix bug in oxford stream device driver where the FIRING_RBV record would not enable in certain cases when the xray was firing.
+* update caqtdm screen for keithley K2410 source meter
 
 v3-0 (June 10, 2016)
 ----

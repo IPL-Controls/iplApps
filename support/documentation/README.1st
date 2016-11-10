@@ -33,6 +33,6 @@
 
   Software requirements
 
-    EPICS base (3.14.12.x) and synApps support modules must be built on your system.
+    EPICS base (3.14 or 3.15) and synApps support modules must be built on your system.
     For win32-x86 and windows-x64 arch, batch scripts are provided for EPICS and synApps 
     build (Some configuration might be required)
