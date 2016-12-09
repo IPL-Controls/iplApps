@@ -89,6 +89,14 @@ DIRS += $(SRS_DS345)
 RELEASE_FILES += $(SRS_DS345)/configure/RELEASE
 endif
 
+ifdef THORLABS_APT
+	# only build this module for windows arch
+	ifeq ($(findstring win, $(EPICS_HOST_ARCH)), win)
+		DIRS += $(THORLABS_APT)
+		RELEASE_FILES += $(THORLABS_APT)/configure/RELEASE
+	endif
+endif
+
 ACTIONS += uninstall realuninstall distclean cvsclean
 
 include $(TOP)/configure/RULES_TOP
