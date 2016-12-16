@@ -12,29 +12,29 @@
 $(info $EPICS_HOST_ARCH is ${EPICS_HOST_ARCH})
 
 #EPICS_BASE=/home/admin/Desktop/epics/base-3.14.12.5
-#SYN_SUPPORT=/home/admin/Desktop/epics/support
+#SUPPORT=/home/admin/Desktop/epics/support
 #IPL_SUPPORT=/home/admin/Desktop/epics/iplApps/support
 
 EPICS_BASE=C:/Epics/base-3.14.12.5
-SYN_SUPPORT=C:/Epics/support
+SUPPORT=C:/Epics/support
 IPL_SUPPORT=C:/Epics/iplApps/support
 
 # Define synApps support modules here to make release consistent.
-AREA_DETECTOR=$(SYN_SUPPORT)/areaDetector-2-5
-ADCORE=$(SYN_SUPPORT)/areaDetector-2-5/ADCore
-ADBINARIES=$(SYN_SUPPORT)/areaDetector-2-5/ADBinaries 
-ASYN=$(SYN_SUPPORT)/asyn-4-30
-AUTOSAVE=$(SYN_SUPPORT)/autosave-5-7-1
-BUSY=$(SYN_SUPPORT)/busy-1-6-1
-CALC=$(SYN_SUPPORT)/calc-3-6-1
-CAPUTLOG=$(SYN_SUPPORT)/caPutLog-3-5
-CAPUTRECORDER=$(SYN_SUPPORT)/caputRecorder-1-6
-DEVIOCSTATS=$(SYN_SUPPORT)/devIocStats-3-1-15
-IOCADMIN=$(SYN_SUPPORT)/devIocStats-3-1-14/iocAdmin
-SNCSEQ=$(SYN_SUPPORT)/seq-2-2-3
-SSCAN=$(SYN_SUPPORT)/sscan-2-10-2
-STD=$(SYN_SUPPORT)/std-3-4
-STREAM=$(SYN_SUPPORT)/stream-2-6
+AREA_DETECTOR=$(SUPPORT)/areaDetector-2-5
+ADCORE=$(SUPPORT)/areaDetector-2-5/ADCore
+ADBINARIES=$(SUPPORT)/areaDetector-2-5/ADBinaries 
+ASYN=$(SUPPORT)/asyn-4-30
+AUTOSAVE=$(SUPPORT)/autosave-5-7-1
+BUSY=$(SUPPORT)/busy-1-6-1
+CALC=$(SUPPORT)/calc-3-6-1
+CAPUTLOG=$(SUPPORT)/caPutLog-3-5
+CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-6
+DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-15
+IOCADMIN=$(SUPPORT)/devIocStats-3-1-14/iocAdmin
+SNCSEQ=$(SUPPORT)/seq-2-2-3
+SSCAN=$(SUPPORT)/sscan-2-10-2
+STD=$(SUPPORT)/std-3-4
+STREAM=$(SUPPORT)/stream-2-6
 
 # Define iplApps support modules here to make release consistent.
 ADNIKONKS=$(IPL_SUPPORT)/ADNikonKs

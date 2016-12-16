@@ -104,7 +104,7 @@ include $(TOP)/configure/RULES_TOP
 release:
 	echo EPICS_HOST_ARCH=$(EPICS_HOST_ARCH)
 	echo ' '
-	echo SYN_SUPPORT=$(SYN_SUPPORT)
+	echo SUPPORT=$(SUPPORT)
 	echo ' '
 	echo IPL_SUPPORT=$(IPL_SUPPORT)
 	echo ' '
@@ -116,5 +116,5 @@ release:
 	echo ' '
 	echo RELEASE_FILES=$(RELEASE_FILES)
 	echo ' '
-	$(PERL) $(TOP)/configure/makeReleaseConsistent.pl $(SYN_SUPPORT) $(IPL_SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
+	$(PERL) $(TOP)/configure/makeReleaseConsistent.pl $(SUPPORT) $(IPL_SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
 

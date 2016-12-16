@@ -1,0 +1,147 @@
+/home/admin/Desktop/epics/iplApps/support/agilentHPE3631A/iocBoot/iocagilentHPE3631A/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/cpi/iocBoot/ioccpi/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/cpiSync/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/galil/iocBoot/iocgalil/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/nikonKsSync/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/keithleyK2410/iocBoot/iockeithleyK2410/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/oxford/iocBoot/iocoxford/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/runControl/iocBoot/iocrunControl/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/procServControl/iocBoot/iocprocServControl/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/scanSupport/iocBoot/iocscanSupport/log.txt {
+	missingok
+  	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/sri/iocBoot/iocsri/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/srsDS345/iocBoot/iocsrsDS345/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/iplApps/support/varianSync/log.txt {
+	missingok
+ 	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/support/motor-6-9/iocBoot/iocWithAsyn/kohzu-log.txt {
+  	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
+
+/home/admin/Desktop/epics/support/motor-6-9/iocBoot/iocWithAsyn/newport-log.txt {
+  	notifempty
+	copytruncate
+	daily
+	rotate 7
+	dateext
+	compress
+}
