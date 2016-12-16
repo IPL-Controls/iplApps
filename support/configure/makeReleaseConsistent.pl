@@ -65,7 +65,7 @@ $prefix[$iter] = "EPICS_BASE";
 $macro{$prefix[$iter]} = "";
 $post{$prefix[$iter]}  = $epics_base;
 $iter++;
-$prefix[$iter] = "SYN_SUPPORT";
+$prefix[$iter] = "SUPPORT";
 $macro{$prefix[$iter]} = "";
 $post{$prefix[$iter]}  = $supporttop;
 $iter++;
