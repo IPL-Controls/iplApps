@@ -21,6 +21,7 @@ v3-1 (December XXX 2016)
 * update application makefiles to build for seq 2.2 and maintain compatibility with seq 2.1
 * fix bug in oxford stream device driver where the FIRING_RBV record would not enable in certain cases when the xray was firing.
 * update caqtdm screen for keithley K2410 source meter
+* update all submodules to compile with base-3.15 series 
 
 v3-0 (June 10, 2016)
 ----

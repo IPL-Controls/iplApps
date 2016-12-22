@@ -11,18 +11,17 @@
 
 $(info $EPICS_HOST_ARCH is ${EPICS_HOST_ARCH})
 
-#EPICS_BASE=/home/admin/Desktop/epics/base-3.14.12.5
+#EPICS_BASE=/home/admin/Desktop/epics/base-3.15.5
 #SUPPORT=/home/admin/Desktop/epics/support
 #IPL_SUPPORT=/home/admin/Desktop/epics/iplApps/support
 
-EPICS_BASE=C:/Epics/base-3.14.12.5
+EPICS_BASE=C:/Epics/base-3.15.5
 SUPPORT=C:/Epics/support
 IPL_SUPPORT=C:/Epics/iplApps/support
 
 # Define synApps support modules here to make release consistent.
 AREA_DETECTOR=$(SUPPORT)/areaDetector-2-5
 ADCORE=$(SUPPORT)/areaDetector-2-5/ADCore
-ADBINARIES=$(SUPPORT)/areaDetector-2-5/ADBinaries 
 ASYN=$(SUPPORT)/asyn-4-30
 AUTOSAVE=$(SUPPORT)/autosave-5-7-1
 BUSY=$(SUPPORT)/busy-1-6-1
@@ -30,7 +29,7 @@ CALC=$(SUPPORT)/calc-3-6-1
 CAPUTLOG=$(SUPPORT)/caPutLog-3-5
 CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-6
 DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-15
-IOCADMIN=$(SUPPORT)/devIocStats-3-1-14/iocAdmin
+IOCADMIN=$(SUPPORT)/devIocStats-3-1-15/iocAdmin
 SNCSEQ=$(SUPPORT)/seq-2-2-3
 SSCAN=$(SUPPORT)/sscan-2-10-2
 STD=$(SUPPORT)/std-3-4
@@ -49,4 +48,4 @@ SCAN_SUPPORT=$(IPL_SUPPORT)/scanSupport
 RUN_CONTROL=$(IPL_SUPPORT)/runControl
 SOURCE_RAY=$(IPL_SUPPORT)/sri
 SRS_DS345=$(IPL_SUPPORT)/srsDS345
-THORLABS_APT=$(IPL_SUPPORT)/thorlabsAPT
+#THORLABS_APT=$(IPL_SUPPORT)/thorlabsAPT
