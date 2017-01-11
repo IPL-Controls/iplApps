@@ -21,7 +21,7 @@ rem set /P FNAME= "Enter log file name: "
 
 :set environment variables
   set TOP=C:\Epics
-  if [%EPICS_BASE%] == [] set EPICS_BASE=C:\Epics\base-3.14.12.5
+  if [%EPICS_BASE%] == [] set EPICS_BASE=C:\Epics\base-3.15.5
   if [%EPICS_EXTENSIONS%] == [] set EPICS_EXTENSIONS=C:\Epics\extensions
   if [%EPICS_IOC_LOG_PORT%] == [] set EPICS_IOC_LOG_PORT=7004
   if [%EPICS_IOC_LOG_FILE_LIMIT%] == [] set EPICS_IOC_LOG_FILE_LIMIT=1073741824
