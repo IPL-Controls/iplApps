@@ -12,6 +12,6 @@ echo EPICS_IOC_LOG_PORT           is defined as ${EPICS_IOC_LOG_PORT}         fo
 echo EPICS_IOC_LOG_FILE_LIMIT     is defined as ${EPICS_IOC_LOG_FILE_LIMIT}   for setting ioc log file size limit
 echo EPICS_IOC_LOG_FILE_NAME      is defined as ${EPICS_IOC_LOG_FILE_NAME}    for ioc log file name
 
-EPICS_IOC_LOG_FILE_NAME="/home/admin/Desktop/epics/pfi_ioc.log" export EPICS_IOC_LOG_FILE_NAME
+EPICS_IOC_LOG_FILE_NAME="/home/admin/Desktop/epics/ioc.log" export EPICS_IOC_LOG_FILE_NAME
 echo "Starting EPICS Log Server. Ctrl + C to Quit Server"
 iocLogServer
